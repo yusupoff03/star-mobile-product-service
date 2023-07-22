@@ -12,8 +12,11 @@ import lombok.*;
 @Builder
 public class ProductEntity extends BaseEntity{
     private String name;
+
     private String model;
+
     @ManyToOne
     private ProductType type;
+
     private Double cost;
 }
