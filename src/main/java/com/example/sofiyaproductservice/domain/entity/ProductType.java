@@ -11,5 +11,6 @@ import lombok.*;
 @Setter
 @Builder
 public class ProductType extends BaseEntity{
+
     private String name;
 }
