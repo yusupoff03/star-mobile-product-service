@@ -2,10 +2,11 @@ package com.example.sofiyaproductservice.controller;
 
 import com.example.sofiyaproductservice.domain.dto.ProductCreatDto;
 import com.example.sofiyaproductservice.domain.entity.ProductEntity;
-import com.example.sofiyaproductservice.service.ProductService;
+import com.example.sofiyaproductservice.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +20,13 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping("/add")
+    @PostMapping("/{userId}/add")
+    @PreAuthorize(value = "hasRole='CUSTOMER'")
     public ResponseEntity<ProductEntity> add(
-            @RequestBody ProductCreatDto productCreatDto
+            @RequestBody ProductCreatDto productCreatDto,
+            @PathVariable UUID userId
     ){
-        return ResponseEntity.ok(productService.add(productCreatDto));
+        return ResponseEntity.ok(productService.add(productCreatDto,userId));
     }
 
     @GetMapping("/get-all")
@@ -43,20 +46,21 @@ public class ProductController {
         return ResponseEntity.status(200).body(productService.search(size, page, name));
     }
 
-    @PutMapping("/{productId}/update")
+    @PutMapping("/{userId}/update")
     public ResponseEntity<ProductEntity> update(
             @RequestBody ProductCreatDto productCreatDto,
-            @PathVariable UUID productId
+            @PathVariable UUID userId,
+            @RequestParam UUID productId
             ){
-        return ResponseEntity.ok(productService.update(productCreatDto,productId));
+        return ResponseEntity.ok(productService.update(productCreatDto,productId,userId));
     }
 
-    @DeleteMapping("/{productId}/delete")
-    public ResponseEntity delete(
-            @PathVariable UUID productId
+    @DeleteMapping("/{userId}/delete")
+    public ResponseEntity<Boolean> delete(
+            @PathVariable UUID userId,
+            @RequestParam UUID productId
     ){
-        productService.deleteById(productId);
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.ok(productService.deleteById(productId,userId));
     }
 
 
