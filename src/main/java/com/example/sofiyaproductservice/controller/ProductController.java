@@ -24,9 +24,10 @@ public class ProductController {
     @PreAuthorize(value = "hasRole='CUSTOMER'")
     public ResponseEntity<ProductEntity> add(
             @RequestBody ProductCreatDto productCreatDto,
-            @PathVariable UUID userId
+            @PathVariable UUID userId,
+            @RequestParam Integer amount
     ){
-        return ResponseEntity.ok(productService.add(productCreatDto,userId));
+        return ResponseEntity.ok(productService.add(productCreatDto,userId,amount));
     }
 
     @GetMapping("/get-all")
@@ -34,7 +35,7 @@ public class ProductController {
             @RequestParam int size,
             @RequestParam int page
     ){
-        return ResponseEntity.status(200).body(productService.getAllProducts(size, page));
+        return ResponseEntity.ok(productService.getAllProducts(size, page));
     }
 
     @GetMapping("/search")
