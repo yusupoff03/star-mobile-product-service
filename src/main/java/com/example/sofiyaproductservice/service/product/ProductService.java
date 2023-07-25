@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductService {
-    ProductEntity add(ProductCreatDto product,UUID userId);
+    ProductEntity add(ProductCreatDto product,UUID userId,Integer amount);
     List<ProductEntity> getAllProducts(int size, int page);
     List<ProductEntity> search(int page,int size,String name);
     Boolean deleteById(UUID id,UUID userId);

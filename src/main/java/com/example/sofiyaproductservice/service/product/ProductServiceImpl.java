@@ -1,17 +1,22 @@
 package com.example.sofiyaproductservice.service.product;
 
+import com.example.sofiyaproductservice.domain.dto.InventoryDto;
 import com.example.sofiyaproductservice.domain.dto.ProductCreatDto;
 import com.example.sofiyaproductservice.domain.entity.ProductEntity;
 import com.example.sofiyaproductservice.exception.DataNotFoundException;
 import com.example.sofiyaproductservice.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,17 +25,32 @@ import java.util.UUID;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
+    private final RestTemplate restTemplate;
 
-    public ProductEntity add(ProductCreatDto product, UUID userId) {
+    @Value("${services.inventory-url}")
+    private String inventoryServiceUrl;
+
+    public ProductEntity add(ProductCreatDto product, UUID userId,Integer amount) {
         ProductEntity productEntity = modelMapper.map(product, ProductEntity.class);
         productEntity.setUserId(userId);
-        return productRepository.save(productEntity);
+        ProductEntity save = productRepository.save(productEntity);
+        InventoryDto inventoryDto=InventoryDto.builder().amount(amount).productId(save.getId()).build();
+        HttpHeaders httpHeaders=new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<InventoryDto> entity=new HttpEntity<>(inventoryDto,httpHeaders);
+        ResponseEntity<String> exchange = restTemplate.exchange(URI.create(inventoryServiceUrl + "/add"),
+                HttpMethod.POST, entity, String.class);
+        return save;
     }
 
 
     public List<ProductEntity> getAllProducts(int size, int page) {
         Pageable pageable = PageRequest.of(page, size);
-        return productRepository.findAll(pageable).getContent();
+        List<ProductEntity> content = productRepository.findAll(pageable).getContent();
+        if(content.isEmpty()){
+            throw new DataNotFoundException("Products not found");
+        }
+        return content;
     }
 
     public List<ProductEntity> search(int page, int size, String name) {
