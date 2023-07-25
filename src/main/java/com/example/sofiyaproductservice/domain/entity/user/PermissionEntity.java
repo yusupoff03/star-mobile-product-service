@@ -11,5 +11,6 @@ import lombok.*;
 @Setter
 @Builder
 public class PermissionEntity extends BaseEntity {
+
     private String permission;
 }

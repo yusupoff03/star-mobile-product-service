@@ -16,7 +16,9 @@ import java.util.List;
 @Getter
 @Setter
 public class RoleEntity extends BaseEntity {
+
     private String name;
+
     @ManyToMany
     private List<PermissionEntity> permissions;
 }
