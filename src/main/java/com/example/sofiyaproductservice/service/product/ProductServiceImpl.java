@@ -53,10 +53,10 @@ public class ProductServiceImpl implements ProductService {
         return content;
     }
 
-    public List<ProductEntity> search(int page, int size, String name) {
+    public List<ProductEntity> search(int page, int size, String model) {
         Sort sort = Sort.by(Sort.Direction.ASC, "name");
         Pageable pageable = PageRequest.of(page, size, sort);
-        return productRepository.searchProductEntitiesByNameContainingIgnoreCase(name, pageable);
+        return productRepository.searchProductEntitiesByModelContainingIgnoreCase(model, pageable);
     }
 
 
