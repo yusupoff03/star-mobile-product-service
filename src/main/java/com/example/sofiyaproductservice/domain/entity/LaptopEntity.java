@@ -14,7 +14,7 @@ import lombok.Setter;
 public class LaptopEntity extends ProductEntity {
 
     private String colour;
-    private double weight;
+    private Double weight;
     private Integer memory;
     private Integer Ram;
     private Integer ScreenSize;
