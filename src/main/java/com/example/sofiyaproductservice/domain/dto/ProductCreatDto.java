@@ -1,6 +1,6 @@
 package com.example.sofiyaproductservice.domain.dto;
 
-import com.example.sofiyaproductservice.domain.entity.ProductType;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @AllArgsConstructor
@@ -9,8 +9,13 @@ import lombok.*;
 @Setter
 @Builder
 public class ProductCreatDto {
+
+    @NotEmpty(message = "name cannot be empty")
     private String name;
+
+    @NotEmpty(message = "model cannot be empty")
     private String model;
-    private ProductType productType;
+
+    @NotEmpty(message = "cost cannot be empty")
     private Double cost;
 }

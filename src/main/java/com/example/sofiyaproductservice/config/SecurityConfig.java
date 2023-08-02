@@ -32,7 +32,7 @@ public class SecurityConfig {
                             .requestMatchers(productOnly).authenticated();
                 })
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore((Filter) new JwtTokenFilter(authenticationService,jwtService),
+                .addFilterBefore(new JwtTokenFilter(authenticationService,jwtService),
                         UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

@@ -1,8 +1,9 @@
 package com.example.sofiyaproductservice.domain.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
+import java.util.UUID;
+
 
 @Entity(name = "product")
 @AllArgsConstructor
@@ -11,12 +12,15 @@ import lombok.*;
 @Setter
 @Builder
 public class ProductEntity extends BaseEntity{
-    private String name;
+    private UUID userId;
 
     private String model;
-
-    @ManyToOne
-    private ProductType type;
+    private String name;
 
     private Double cost;
 }
+
+
+
+
+
