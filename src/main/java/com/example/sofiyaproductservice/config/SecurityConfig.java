@@ -3,7 +3,6 @@ package com.example.sofiyaproductservice.config;
 import com.example.sofiyaproductservice.filter.JwtTokenFilter;
 import com.example.sofiyaproductservice.service.AuthenticationService;
 import com.example.sofiyaproductservice.service.JwtService;
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
