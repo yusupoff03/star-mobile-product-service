@@ -1,5 +1,6 @@
 package com.example.sofiyaproductservice.service;
 
+
 import com.example.sofiyaproductservice.domain.dto.InventoryDto;
 import com.example.sofiyaproductservice.domain.dto.ProductCreatDto;
 import com.example.sofiyaproductservice.domain.entity.ProductEntity;
@@ -12,11 +13,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Example;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
-import java.util.*;
+
+import java.net.URI;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class ProductServiceImplTest {
@@ -33,73 +42,71 @@ public class ProductServiceImplTest {
     @InjectMocks
     private ProductServiceImpl productService;
 
-    private final UUID userId = UUID.randomUUID();
-    private final String inventoryServiceUrl = "http://inventory-service/api/v1"; // replace with your actual URL
-
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        productService = new ProductServiceImpl(productRepository, modelMapper, restTemplate);
-        productService.add(inventoryServiceUrl);
     }
 
     @Test
     public void testAddProduct() {
-        // Mock data
-        ProductCreatDto productDto = new ProductCreatDto();
-        productDto.setName("Test Product");
-        Integer amount = 10;
+        // Mocking input data
+        ProductCreatDto productCreatDto = new ProductCreatDto();
+        UUID userId = UUID.randomUUID();
+        Integer amount = 100;
+        UUID productId = UUID.randomUUID();
 
-        ProductEntity savedProduct = new ProductEntity();
-        savedProduct.setId(UUID.randomUUID());
-        savedProduct.setBrand(productDto.getName());
-        savedProduct.setUserId(userId);
+        // Mocking productEntity
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setId(productId);
+        productEntity.setUserId(userId);
 
+        // Mocking inventoryDto
         InventoryDto inventoryDto = new InventoryDto();
+        inventoryDto.setProductId(productId);
         inventoryDto.setAmount(amount);
-        inventoryDto.setProductId(savedProduct.getId());
 
+        // Mocking restTemplate exchange
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<InventoryDto> entity = new HttpEntity<>(inventoryDto, httpHeaders);
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(HttpStatus.OK);
 
-        ResponseEntity<String> mockResponse = new ResponseEntity<>("Inventory updated", HttpStatus.OK);
-        when(productRepository.save(any(ProductEntity.class))).thenReturn(savedProduct);
-        when(restTemplate.exchange(eq(inventoryServiceUrl + "/add"), eq(HttpMethod.POST), eq(entity), eq(String.class)))
-                .thenReturn(mockResponse);
+        when(modelMapper.map(eq(productCreatDto), eq(ProductEntity.class))).thenReturn(productEntity);
+        when(productRepository.save(any(ProductEntity.class))).thenReturn(productEntity);
+        when(restTemplate.exchange(any(URI.class), eq(HttpMethod.POST), eq(entity), eq(String.class)))
+                .thenReturn(responseEntity);
 
-        // Call the method to add a product
-        ProductEntity addedProduct = productService.add(productDto, userId, amount);
+        // Perform the test
+        ProductEntity result = productService.add(productCreatDto, userId, amount);
 
-        // Verify the result
-        assertNotNull(addedProduct);
-        assertEquals(savedProduct.getId(), addedProduct.getId());
-        assertEquals(savedProduct.getName(), addedProduct.getName());
-        assertEquals(userId, addedProduct.getUserId());
+        // Assertions
+        assertNotNull(result);
+        assertEquals(productId, result.getId());
+        assertEquals(userId, result.getUserId());
+        verify(modelMapper, times(1)).map(eq(productCreatDto), eq(ProductEntity.class));
+        verify(productRepository, times(1)).save(any(ProductEntity.class));
+        verify(restTemplate, times(1)).exchange(any(URI.class), eq(HttpMethod.POST), eq(entity), eq(String.class));
     }
 
     @Test
     public void testGetAllProducts() {
-        // Mock data
-        int size = 5;
+        // Mocking input data
+        int size = 10;
         int page = 0;
-        List<ProductEntity> mockProducts = Arrays.asList(
-                new ProductEntity(UUID.randomUUID(), "Product 1"),
-                new ProductEntity(UUID.randomUUID(), "Product 2"),
-                new ProductEntity(UUID.randomUUID(), "Product 3")
-        );
+        List<ProductEntity> products = Collections.singletonList(new ProductEntity());
 
-        when(productRepository.findAll(any())).thenReturn(new ArrayList<>(mockProducts));
+        // Mocking productRepository findAll
+        when(productRepository.findAll((Example<ProductEntity>) any())).thenReturn(products);
 
-        // Call the method to get all products
+        // Perform the test
         List<ProductEntity> result = productService.getAllProducts(size, page);
 
-        // Verify the result
+        // Assertions
         assertNotNull(result);
-        assertEquals(mockProducts.size(), result.size());
-        assertEquals(mockProducts, result);
+        assertEquals(products, result);
+        verify(productRepository, times(1)).findAll((Example<ProductEntity>) any());
     }
 
-    // Add more test cases for other methods in the ProductService if needed.
+    // Add more test methods for other methods in the ProductServiceImpl class.
 }
 
