@@ -22,6 +22,7 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final String[] productOnly = {"/api/v1/product/**","/api/v1/laptop/**"};
 
+    private final String[] productOnly = {"/api/v1/product/**","/api/v1/phone/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
