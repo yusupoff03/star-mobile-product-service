@@ -18,4 +18,6 @@ public class ProductCreatDto {
 
     @NotEmpty(message = "cost cannot be empty")
     private Double cost;
+
+    private String productType;
 }
