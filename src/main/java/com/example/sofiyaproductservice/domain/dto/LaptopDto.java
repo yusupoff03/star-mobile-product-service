@@ -27,4 +27,15 @@ public class LaptopDto {
 
     @NotEmpty(message = "Ghz cannot be empty")
     private Integer Ghz;
+    @NotEmpty(message = "name cannot be empty")
+    private String name;
+
+    @NotEmpty(message = "model cannot be empty")
+    private String model;
+
+    @NotEmpty(message = "cost cannot be empty")
+    private Double cost;
+
+    @NotEmpty(message = "product type cannot be empty")
+    private String productType;
 }
