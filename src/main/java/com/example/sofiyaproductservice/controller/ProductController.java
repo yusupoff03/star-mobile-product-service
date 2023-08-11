@@ -21,7 +21,9 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/{userId}/add")
-    @PreAuthorize(value = "hasRole='CUSTOMER'")
+//    @PreAuthorize(value = "hasRole='CUSTOMER'")
+//    @PreAuthorize("hasAuthority('CUSTOMER')")
+    @PreAuthorize(value = "hasRole('CUSTOMER')")
     public ResponseEntity<ProductEntity> add(
             @RequestBody ProductCreatDto productCreatDto,
             @PathVariable UUID userId,
