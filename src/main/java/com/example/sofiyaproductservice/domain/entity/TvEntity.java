@@ -11,26 +11,19 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity(name = "Tv")
+@Entity
+@DiscriminatorColumn(name = "tv")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class TvEntity extends BaseEntity{
+public class TvEntity extends ProductEntity{
 
 
     private Double isSmart;
     private Integer Size;
     private Integer ScreenSpeed;
 
-    private UUID userId;
-
-    private String model;
-    private String name;
-    @ManyToOne
-    private ProductType productType;
-
-    private Double cost;
 
 
 }

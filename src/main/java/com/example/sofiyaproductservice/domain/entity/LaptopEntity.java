@@ -11,12 +11,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity(name = "laptop")
+@Entity
+@DiscriminatorColumn(name = "laptop")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class LaptopEntity extends BaseEntity {
+public class LaptopEntity extends ProductEntity {
 
     private String colour;
     private Double weight;
@@ -25,13 +26,5 @@ public class LaptopEntity extends BaseEntity {
     private Integer ScreenSize;
     private Integer Ghz;
 
-    private UUID userId;
-
-    private String model;
-    private String name;
-    @ManyToOne
-    private ProductType productType;
-
-    private Double cost;
 
 }
