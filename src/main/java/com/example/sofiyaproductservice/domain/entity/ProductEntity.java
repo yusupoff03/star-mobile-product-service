@@ -1,6 +1,7 @@
 package com.example.sofiyaproductservice.domain.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import java.util.UUID;
 

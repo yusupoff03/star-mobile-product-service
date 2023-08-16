@@ -7,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,22 +22,18 @@ public class UserEntity extends BaseEntity implements UserDetails {
    private String email;
    @Column(nullable = false)
    private String password;
-    @ManyToMany
-    private List<RoleEntity> roles;
+    @ManyToOne
+    public RoleEntity role;
 
-    @ManyToMany
-    private List<PermissionEntity> permissions;
+    @ManyToOne
+    public PermissionEntity permission;
     @Enumerated(EnumType.STRING)
     private UserState state;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         String ROLE = "ROLE_";
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for (RoleEntity role : roles) {
-            authorities.add(new SimpleGrantedAuthority(ROLE + role.getName()));
-        }
-        return authorities;
+        return List.of(new SimpleGrantedAuthority(ROLE+role));
     }
 
     @Override
