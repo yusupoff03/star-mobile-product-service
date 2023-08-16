@@ -1,7 +1,8 @@
 package com.example.sofiyaproductservice.domain.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 import java.util.UUID;
 
@@ -17,6 +18,8 @@ public class ProductEntity extends BaseEntity{
 
     private String model;
     private String name;
+    @ManyToOne
+    private ProductType productType;
 
     private Double cost;
 }

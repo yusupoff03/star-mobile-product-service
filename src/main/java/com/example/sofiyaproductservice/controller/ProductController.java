@@ -21,12 +21,13 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/{userId}/add")
-    @PreAuthorize(value = "hasRole='ROLE_CUSTOMER'")
+    @PreAuthorize(value = "hasRole('CUSTOMER')")
     public ResponseEntity<ProductEntity> add(
             @RequestBody ProductCreatDto productCreatDto,
             @PathVariable UUID userId,
             @RequestParam Integer amount
     ){
+
         return ResponseEntity.ok(productService.add(productCreatDto,userId,amount));
     }
 

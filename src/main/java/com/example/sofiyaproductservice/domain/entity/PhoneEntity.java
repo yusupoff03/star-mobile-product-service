@@ -1,17 +1,23 @@
 package com.example.sofiyaproductservice.domain.entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity(name = "phone")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class PhoneEntity extends ProductEntity {
+public class PhoneEntity extends BaseEntity {
+
     private String colour;
     private String size;
     private double weight;
@@ -21,4 +27,11 @@ public class PhoneEntity extends ProductEntity {
     private Integer FrontCamera;
     private Integer BackCamera;
     private String description;
-}
+    private UUID userId;
+
+    private String model;
+    private String name;
+    @ManyToOne
+    private ProductType productType;
+
+    private Double cost;}
