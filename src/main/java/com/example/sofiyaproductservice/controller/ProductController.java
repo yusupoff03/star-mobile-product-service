@@ -3,6 +3,7 @@ package com.example.sofiyaproductservice.controller;
 import com.example.sofiyaproductservice.domain.dto.ProductCreatDto;
 import com.example.sofiyaproductservice.domain.entity.ProductEntity;
 import com.example.sofiyaproductservice.service.product.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 
@@ -14,21 +15,22 @@ import java.util.UUID;
 
 
 @RestController
-@RequestMapping("/api/v1/product")
+@RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping("/{userId}/add")
+    @PostMapping("/add")
     @PreAuthorize(value = "hasRole('CUSTOMER')")
     public ResponseEntity<ProductEntity> add(
             @RequestBody ProductCreatDto productCreatDto,
-            @PathVariable UUID userId,
-            @RequestParam Integer amount
+            @RequestParam UUID userId,
+            @RequestParam Integer amount,
+            HttpServletRequest request
     ){
 
-        return ResponseEntity.ok(productService.add(productCreatDto,userId,amount));
+        return ResponseEntity.ok(productService.add(productCreatDto,userId,amount,request.getHeader("authorization")));
     }
 
     @GetMapping("/get-all")

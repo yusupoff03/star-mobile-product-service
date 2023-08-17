@@ -30,16 +30,11 @@ public class ProductServiceImpl implements ProductService {
     @Value("${services.inventory-url}")
     private String inventoryServiceUrl;
 
-    public ProductEntity add(ProductCreatDto product, UUID userId,Integer amount) {
+    public ProductEntity add(ProductCreatDto product, UUID userId,Integer amount,String token) {
         ProductEntity productEntity = modelMapper.map(product, ProductEntity.class);
         productEntity.setUserId(userId);
         ProductEntity save = productRepository.save(productEntity);
-        InventoryDto inventoryDto=InventoryDto.builder().amount(amount).productId(save.getId()).build();
-        HttpHeaders httpHeaders=new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<InventoryDto> entity=new HttpEntity<>(inventoryDto,httpHeaders);
-        ResponseEntity<String> exchange = restTemplate.exchange(URI.create(inventoryServiceUrl + "/add"),
-                HttpMethod.POST, entity, String.class);
+        addInventory(save,amount,token);
         return save;
     }
 
@@ -79,5 +74,16 @@ public class ProductServiceImpl implements ProductService {
             return productRepository.save(productEntity);
         }
         throw new DataNotFoundException("Product not found");
+    }
+    public void addInventory(ProductEntity save,Integer amount,String token){
+        InventoryDto inventoryDto = new InventoryDto(save.getId(),amount);
+        HttpHeaders httpHeaders=new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        token=token.substring(7);
+        httpHeaders.setBearerAuth(token);
+        HttpEntity<InventoryDto> entity=new HttpEntity<>(inventoryDto,httpHeaders);
+        ResponseEntity<String> exchange = restTemplate.exchange(URI.create(inventoryServiceUrl + "/add"),
+                HttpMethod.POST, entity, String.class);
+        String body = exchange.getBody();
     }
 }

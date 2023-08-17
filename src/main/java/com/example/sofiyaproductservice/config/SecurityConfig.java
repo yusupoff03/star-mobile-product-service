@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
-    private final String[] productOnly = {"/api/v1/product/**","/api/v1/laptop/**","/api/v1/phone/**"};
+    private final String[] productOnly = {"/product/**"};
 
 
     @Bean
