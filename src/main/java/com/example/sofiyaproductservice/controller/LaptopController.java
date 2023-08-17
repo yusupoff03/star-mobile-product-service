@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/laptop")
+@RequestMapping("/product/laptop")
 @RequiredArgsConstructor
 public class LaptopController {
 

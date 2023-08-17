@@ -10,5 +10,5 @@ import java.util.UUID;
 @Builder
 public class InventoryDto {
     private UUID productId;
-    private Integer amount;
+    private Integer productCount;
 }

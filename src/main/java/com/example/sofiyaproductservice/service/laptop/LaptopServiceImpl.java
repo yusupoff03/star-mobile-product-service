@@ -31,7 +31,7 @@ public class LaptopServiceImpl implements LaptopService{
         laptopEntity.setUserId(userId);
         LaptopEntity saved = laptopRepository.save(laptopEntity);
 
-        InventoryDto inventoryDto = InventoryDto.builder().amount(amount).productId(saved.getId()).build();
+        InventoryDto inventoryDto = InventoryDto.builder().productCount(amount).productId(saved.getId()).build();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<InventoryDto> inventoryDtoHttpEntity = new HttpEntity<>(inventoryDto, httpHeaders);

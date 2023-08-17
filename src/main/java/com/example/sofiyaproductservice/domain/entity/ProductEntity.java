@@ -20,8 +20,7 @@ public class ProductEntity extends BaseEntity{
 
     private String model;
     private String name;
-    @ManyToOne
-    private ProductType productType;
+    private String productType;
 
     private Double cost;
 }

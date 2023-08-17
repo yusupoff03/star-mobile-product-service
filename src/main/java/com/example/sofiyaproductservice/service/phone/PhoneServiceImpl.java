@@ -32,7 +32,7 @@ public class PhoneServiceImpl implements PhoneService{
         PhoneEntity phoneEntity = modelMapper.map(phoneDto,PhoneEntity.class);
         phoneEntity.setUserId(userId);
         PhoneEntity save = phoneRepository.save(phoneEntity);
-        InventoryDto inventoryDto = InventoryDto.builder().amount(amount).productId(save.getId()).build();
+        InventoryDto inventoryDto = InventoryDto.builder().productCount(amount).productId(save.getId()).build();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<InventoryDto> entity=new HttpEntity<>(inventoryDto,httpHeaders);
