@@ -20,7 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
-    private final String[] productOnly = {"/product/**"};
+
+    private final String[] permitAll = {"/swagger-ui/**", "/v3/api-docs/**", "/product/**", "/product/laptop/**","/product/phone/**"};
+
 
 
     @Bean
@@ -29,8 +31,8 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests((authorizer) -> {
                     authorizer
-                            .requestMatchers(productOnly)
-                            .authenticated();
+                            .requestMatchers(permitAll).permitAll()
+                            .anyRequest().authenticated();
                 })
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtTokenFilter(authenticationService,jwtService),
