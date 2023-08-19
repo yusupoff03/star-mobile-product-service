@@ -20,7 +20,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/add")
-    @PreAuthorize(value = "hasRole('CUSTOMER')")
+    @PreAuthorize(value = "hasRole('Seller')")
     public ResponseEntity<ProductEntity> add(
             @RequestBody ProductCreatDto productCreatDto,
             @RequestParam UUID userId,
@@ -33,7 +33,7 @@ public class ProductController {
 
     @GetMapping("/get-all")
     public ResponseEntity<List<ProductEntity>> getAll(
-            @RequestParam int size,
+            @RequestParam(required = false,defaultValue = "10") int size,
             @RequestParam int page
     ){
         return ResponseEntity.ok(productService.getAllProducts(size, page));
@@ -49,6 +49,7 @@ public class ProductController {
     }
 
     @PutMapping("/{userId}/update")
+    @PreAuthorize("hasRole('Seller')")
     public ResponseEntity<ProductEntity> update(
             @RequestBody ProductCreatDto productCreatDto,
             @PathVariable UUID userId,
@@ -58,6 +59,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{userId}/delete")
+    @PreAuthorize("hasRole('Seller')")
     public ResponseEntity<Boolean> delete(
             @PathVariable UUID userId,
             @RequestParam UUID productId,
