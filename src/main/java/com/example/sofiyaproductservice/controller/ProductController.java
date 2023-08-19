@@ -6,10 +6,8 @@ import com.example.sofiyaproductservice.service.product.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -43,8 +41,8 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity<List<ProductEntity>> search(
-            @RequestParam int size,
-            @RequestParam int page,
+            @RequestParam(defaultValue = "10",required = false) int size,
+            @RequestParam(defaultValue = "0",required = false) int page,
             @RequestParam String name
     ){
         return ResponseEntity.status(200).body(productService.search(size, page, name));
@@ -62,12 +60,11 @@ public class ProductController {
     @DeleteMapping("/{userId}/delete")
     public ResponseEntity<Boolean> delete(
             @PathVariable UUID userId,
-            @RequestParam UUID productId
+            @RequestParam UUID productId,
+            HttpServletRequest request
     ){
-        return ResponseEntity.ok(productService.deleteById(productId,userId));
+        return ResponseEntity.ok(productService.deleteById(productId,userId,request.getHeader("authorization")));
     }
-
-
 
 
 }

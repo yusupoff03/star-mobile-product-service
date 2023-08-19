@@ -10,6 +10,6 @@ public interface ProductService {
     ProductEntity add(ProductCreatDto product,UUID userId,Integer amount,String token);
     List<ProductEntity> getAllProducts(int size, int page);
     List<ProductEntity> search(int page,int size,String name);
-    Boolean deleteById(UUID id,UUID userId);
+    Boolean deleteById(UUID id,UUID userId,String token);
     ProductEntity update(ProductCreatDto update,UUID id,UUID userId);
 }

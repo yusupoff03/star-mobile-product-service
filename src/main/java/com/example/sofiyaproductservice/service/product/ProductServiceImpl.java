@@ -55,11 +55,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    public Boolean deleteById(UUID id, UUID userId) {
-        ProductEntity productNotFound = productRepository.findById(id)
+    public Boolean deleteById(UUID productId, UUID userId,String token) {
+        ProductEntity productNotFound = productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Product not found"));
         if (productNotFound.getUserId().equals(userId)) {
-            productRepository.deleteById(id);
+            productRepository.deleteById(productId);
+            deleteInventory(productId,token);
             return true;
         }
         throw new DataNotFoundException("Product not found");
@@ -86,4 +87,16 @@ public class ProductServiceImpl implements ProductService {
                 HttpMethod.POST, entity, String.class);
         String body = exchange.getBody();
     }
+    public void deleteInventory(UUID productId,String token){
+        HttpHeaders httpHeaders=new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        token=token.substring(7);
+        httpHeaders.setBearerAuth(token);
+        HttpEntity<UUID> entity=new HttpEntity<>(productId,httpHeaders);
+        ResponseEntity<String> exchange = restTemplate.exchange(URI.create(inventoryServiceUrl +"/"+ productId + "/delete"),
+                HttpMethod.DELETE, entity, String.class);
+        String body = exchange.getBody();
+
+    }
+
 }

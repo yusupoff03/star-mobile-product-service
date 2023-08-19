@@ -6,6 +6,7 @@ import com.example.sofiyaproductservice.domain.entity.LaptopEntity;
 import com.example.sofiyaproductservice.domain.entity.ProductEntity;
 import com.example.sofiyaproductservice.exception.RequestValidationException;
 import com.example.sofiyaproductservice.service.laptop.LaptopService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +38,45 @@ public class LaptopController {
         }
         return ResponseEntity.ok(laptopService.add(laptopDto,userId,amount));
     }
+    @GetMapping("/get-all")
+    public ResponseEntity<List<LaptopEntity>> getAll(
+            @RequestParam int size,
+            @RequestParam int page
+    ){
+        return ResponseEntity.ok(laptopService.getAllLaptops(size, page));
+    }
+
+    @GetMapping("/search-by-name")
+    public ResponseEntity<List<LaptopEntity>> search(
+            @RequestParam int size,
+            @RequestParam int page,
+            @RequestParam String name
+    ){
+        return ResponseEntity.status(200).body(laptopService.search(size, page, name));
+    }
+
+    @PutMapping("/{userId}/update")
+    public ResponseEntity<LaptopEntity> update(
+            @Valid  @RequestBody LaptopDto laptopDto,
+            @PathVariable UUID userId,
+            @RequestParam UUID laptopId,
+            BindingResult bindingResult
+    ){
+        if(bindingResult.hasErrors()){
+            List<ObjectError> allErrors = bindingResult.getAllErrors();
+            throw new RequestValidationException(allErrors);
+        }
+        return ResponseEntity.ok(laptopService.update(laptopDto,laptopId,userId));
+    }
+
+    @DeleteMapping("/{userId}/delete")
+    public ResponseEntity<Boolean> delete(
+            @PathVariable UUID userId,
+            @RequestParam UUID laptopId,
+            HttpServletRequest request
+    ){
+        return ResponseEntity.ok(laptopService.deleteById(laptopId,userId,request.getHeader("authorization")));
+    }
+
 
 }
