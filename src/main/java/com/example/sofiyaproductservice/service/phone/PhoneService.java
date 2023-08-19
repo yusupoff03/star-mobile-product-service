@@ -13,7 +13,7 @@ public interface PhoneService {
 
     List<PhoneEntity> getAllPhone(int size, int page);
     List<PhoneEntity> search(int page,int size,String name);
-    Boolean deleteById(UUID id,UUID userId);
+    Boolean deleteById(UUID id,UUID userId,String token);
     PhoneEntity update(PhoneDto update,UUID id,UUID userId);
 
 
