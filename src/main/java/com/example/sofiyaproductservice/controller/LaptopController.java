@@ -1,9 +1,7 @@
 package com.example.sofiyaproductservice.controller;
 
 import com.example.sofiyaproductservice.domain.dto.LaptopDto;
-import com.example.sofiyaproductservice.domain.dto.ProductCreatDto;
 import com.example.sofiyaproductservice.domain.entity.LaptopEntity;
-import com.example.sofiyaproductservice.domain.entity.ProductEntity;
 import com.example.sofiyaproductservice.exception.RequestValidationException;
 import com.example.sofiyaproductservice.service.laptop.LaptopService;
 import jakarta.servlet.http.HttpServletRequest;
