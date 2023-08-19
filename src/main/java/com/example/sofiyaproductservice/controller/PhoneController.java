@@ -1,9 +1,7 @@
 package com.example.sofiyaproductservice.controller;
 
 import com.example.sofiyaproductservice.domain.dto.PhoneDto;
-import com.example.sofiyaproductservice.domain.dto.ProductCreatDto;
 import com.example.sofiyaproductservice.domain.entity.PhoneEntity;
-import com.example.sofiyaproductservice.domain.entity.ProductEntity;
 import com.example.sofiyaproductservice.service.phone.PhoneService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
