@@ -60,9 +60,10 @@ public class PhoneController {
     @DeleteMapping("/{userId}/delete")
     public ResponseEntity<Boolean> delete(
             @PathVariable UUID userId,
-            @RequestParam UUID phoneId
+            @RequestParam UUID phoneId,
+            HttpServletRequest request
     ){
-        return ResponseEntity.ok(phoneService.deleteById(phoneId,userId));
+        return ResponseEntity.ok(phoneService.deleteById(phoneId,userId,request.getHeader("authorization")));
     }
 
 
