@@ -23,37 +23,39 @@ public class LaptopController {
 
     private final LaptopService laptopService;
     @PostMapping("/{userId}/add")
-    @PreAuthorize(value = "hasRole('CUSTOMER')")
+    @PreAuthorize(value = "hasRole('Seller')")
     public ResponseEntity<LaptopEntity> add(
           @Valid @RequestBody LaptopDto laptopDto,
             @PathVariable UUID userId,
             @RequestParam Integer amount,
+          HttpServletRequest request,
           BindingResult bindingResult
     ){
         if(bindingResult.hasErrors()){
             List<ObjectError> allErrors = bindingResult.getAllErrors();
             throw new RequestValidationException(allErrors);
         }
-        return ResponseEntity.ok(laptopService.add(laptopDto,userId,amount));
+        return ResponseEntity.ok(laptopService.add(laptopDto,userId,amount,request.getHeader("authorization")));
     }
     @GetMapping("/get-all")
     public ResponseEntity<List<LaptopEntity>> getAll(
-            @RequestParam int size,
-            @RequestParam int page
+            @RequestParam(defaultValue = "10",required = false)  int size,
+            @RequestParam(defaultValue = "0",required = false)  int page
     ){
         return ResponseEntity.ok(laptopService.getAllLaptops(size, page));
     }
 
     @GetMapping("/search-by-name")
     public ResponseEntity<List<LaptopEntity>> search(
-            @RequestParam int size,
-            @RequestParam int page,
+            @RequestParam(defaultValue = "10",required = false)  int size,
+            @RequestParam(defaultValue = "0",required = false)  int page,
             @RequestParam String name
     ){
         return ResponseEntity.status(200).body(laptopService.search(size, page, name));
     }
 
     @PutMapping("/{userId}/update")
+    @PreAuthorize(value = "hasRole('Seller')")
     public ResponseEntity<LaptopEntity> update(
             @Valid  @RequestBody LaptopDto laptopDto,
             @PathVariable UUID userId,

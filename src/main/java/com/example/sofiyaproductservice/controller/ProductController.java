@@ -34,7 +34,7 @@ public class ProductController {
     @GetMapping("/get-all")
     public ResponseEntity<List<ProductEntity>> getAll(
             @RequestParam(required = false,defaultValue = "10") int size,
-            @RequestParam int page
+            @RequestParam(defaultValue = "0",required = false)  int page
     ){
         return ResponseEntity.ok(productService.getAllProducts(size, page));
     }
