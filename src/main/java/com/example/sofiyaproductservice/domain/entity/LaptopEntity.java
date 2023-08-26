@@ -6,20 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Entity(name = "laptop")
 @DiscriminatorColumn(name = "laptop")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class LaptopEntity extends ProductEntity {
-
+public class LaptopEntity extends BaseEntity {
     private String colour;
     private Double weight;
     private Integer memory;
     private Integer Ram;
     private Integer ScreenSize;
     private Integer Ghz;
-
-
 }

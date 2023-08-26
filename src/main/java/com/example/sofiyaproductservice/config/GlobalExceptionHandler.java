@@ -3,6 +3,7 @@ package com.example.sofiyaproductservice.config;
 import com.example.sofiyaproductservice.exception.AuthenticationFailedException;
 import com.example.sofiyaproductservice.exception.DataNotFoundException;
 import com.example.sofiyaproductservice.exception.RequestValidationException;
+import com.example.sofiyaproductservice.exception.UnauthorizedAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,7 +32,11 @@ public class GlobalExceptionHandler {
             RequestValidationException e){
         return ResponseEntity.status(400).body(e.getMessage());
     }
-
+@ExceptionHandler(value = {UnauthorizedAccessException.class})
+    public ResponseEntity<String> unauthorizedAccessException
+        (UnauthorizedAccessException e){
+        return ResponseEntity.status(403).body(e.getMessage());
+}
 
 
 

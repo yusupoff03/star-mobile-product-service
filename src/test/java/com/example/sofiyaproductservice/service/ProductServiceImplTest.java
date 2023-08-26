@@ -54,6 +54,7 @@ public class ProductServiceImplTest {
         UUID userId = UUID.randomUUID();
         Integer amount = 100;
         UUID productId = UUID.randomUUID();
+        String token="token";
 
         // Mocking productEntity
         ProductEntity productEntity = new ProductEntity();
@@ -63,7 +64,6 @@ public class ProductServiceImplTest {
         // Mocking inventoryDto
         InventoryDto inventoryDto = new InventoryDto();
         inventoryDto.setProductId(productId);
-        inventoryDto.setAmount(amount);
 
         // Mocking restTemplate exchange
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -77,7 +77,7 @@ public class ProductServiceImplTest {
                 .thenReturn(responseEntity);
 
         // Perform the test
-        ProductEntity result = productService.add(productCreatDto, userId, amount);
+        ProductEntity result = productService.add(productCreatDto, userId, amount,token);
 
         // Assertions
         assertNotNull(result);
@@ -105,6 +105,14 @@ public class ProductServiceImplTest {
         assertNotNull(result);
         assertEquals(products, result);
         verify(productRepository, times(1)).findAll((Example<ProductEntity>) any());
+    }
+    @Test
+    public void testDelete(){
+        UUID productId= java.util.UUID.randomUUID();
+        UUID userId=UUID.randomUUID();
+        String token="token";
+        Optional<ProductEntity> product=Optional.of(new ProductEntity());
+        when(productRepository.findById(productId)).thenReturn(product);
     }
 
     // Add more test methods for other methods in the ProductServiceImpl class.

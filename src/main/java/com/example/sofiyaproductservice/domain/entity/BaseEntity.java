@@ -24,4 +24,8 @@ public abstract class BaseEntity {
     protected LocalDateTime createdDate;
     @UpdateTimestamp
     protected LocalDateTime updatedDate;
+    protected UUID userId;
+    protected String model;
+    protected String name;
+    protected Double cost;
 }

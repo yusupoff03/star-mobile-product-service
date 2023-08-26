@@ -21,7 +21,7 @@ public class SecurityConfig {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
 
-    private final String[] permitAll = {"/swagger-ui/**", "/v3/api-docs/**", "/product/**", "/product/laptop/**","/product/phone/**", "/product/tv/**"};
+    private final String[] permitAll = {"/swagger-ui/**", "/v3/api-docs/**", "/product/get-all", /*"/product/laptop/**","/product/phone/**", "/product/tv/**"*/};
 
 
 

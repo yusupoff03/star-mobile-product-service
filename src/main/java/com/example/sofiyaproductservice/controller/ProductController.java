@@ -2,11 +2,18 @@ package com.example.sofiyaproductservice.controller;
 
 import com.example.sofiyaproductservice.domain.dto.ProductCreatDto;
 import com.example.sofiyaproductservice.domain.entity.ProductEntity;
+import com.example.sofiyaproductservice.exception.UnauthorizedAccessException;
 import com.example.sofiyaproductservice.service.product.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.core.SecurityContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
@@ -20,15 +27,17 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/add")
-    @PreAuthorize(value = "hasRole('Seller')")
     public ResponseEntity<ProductEntity> add(
             @RequestBody ProductCreatDto productCreatDto,
             @RequestParam UUID userId,
             @RequestParam Integer amount,
             HttpServletRequest request
     ){
-
-        return ResponseEntity.ok(productService.add(productCreatDto,userId,amount,request.getHeader("authorization")));
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        if(!authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_Seller"))){
+            throw new UnauthorizedAccessException("You don`t have permission to access this recourse");
+        }
+            return ResponseEntity.ok(productService.add(productCreatDto,userId,amount,request.getHeader("authorization")));
     }
 
     @GetMapping("/get-all")
