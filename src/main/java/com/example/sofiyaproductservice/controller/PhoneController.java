@@ -20,7 +20,7 @@ public class PhoneController {
     private final PhoneService phoneService;
 
     @PostMapping("{userId}/add")
-    @PreAuthorize(value = "hasRole('CUSTOMER')")
+    @PreAuthorize(value = "hasRole('Seller')")
     public ResponseEntity<PhoneEntity> add(
             @RequestBody PhoneDto phoneDto,
             @PathVariable UUID userId,

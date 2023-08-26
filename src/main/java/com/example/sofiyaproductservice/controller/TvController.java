@@ -20,7 +20,7 @@ public class TvController {
     private final TvService tvService;
 
     @PostMapping("/add")
-    @PreAuthorize(value = "hasRole('CUSTOMER')")
+    @PreAuthorize(value = "hasRole('Seller')")
     public ResponseEntity<TvEntity> add(
             @RequestBody TvDto tvDto,
             @RequestParam UUID userId,

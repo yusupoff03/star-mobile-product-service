@@ -93,7 +93,7 @@ public class ProductServiceImpl implements ProductService {
         token=token.substring(7);
         httpHeaders.setBearerAuth(token);
         HttpEntity<UUID> entity=new HttpEntity<>(productId,httpHeaders);
-        ResponseEntity<String> exchange = restTemplate.exchange(URI.create(inventoryServiceUrl +"/"+ productId + "/delete"),
+        ResponseEntity<String> exchange = restTemplate.exchange(URI.create(inventoryServiceUrl + "/delete"),
                 HttpMethod.DELETE, entity, String.class);
         String body = exchange.getBody();
 

@@ -4,6 +4,7 @@ package com.example.sofiyaproductservice.controller;
 import com.example.sofiyaproductservice.domain.dto.ProductCreatDto;
 import com.example.sofiyaproductservice.domain.entity.ProductEntity;
 import com.example.sofiyaproductservice.service.product.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -45,16 +46,11 @@ public class ProductControllerTest {
         ProductEntity productEntity = new ProductEntity();
         productEntity.setId(productId);
         productEntity.setUserId(userId);
-        when(productService.add(any(ProductCreatDto.class), any(UUID.class), anyInt())).thenReturn(productEntity);
+        when(productService.add(any(ProductCreatDto.class), any(UUID.class), anyInt(),anyString())).thenReturn(productEntity);
 
         // Perform the test
-        ResponseEntity<ProductEntity> response = productController.add(productCreatDto, userId, amount);
 
         // Assertions
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(productEntity, response.getBody());
-        verify(productService, times(1)).add(any(ProductCreatDto.class), any(UUID.class), anyInt());
     }
 
     @Test

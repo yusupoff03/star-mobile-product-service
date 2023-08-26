@@ -11,15 +11,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-//        (name = "phone")
-@DiscriminatorColumn(name = "phone")
+@Entity(name = "phone")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class PhoneEntity extends ProductEntity {
-
+public class PhoneEntity extends BaseEntity {
     private String colour;
     private String size;
     private double weight;
